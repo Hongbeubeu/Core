@@ -1,8 +1,8 @@
+using System;
+using System.Collections.Generic;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
-using System;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using Color = UnityEngine.Color;
@@ -11,27 +11,27 @@ namespace SuperAshley.GoogleSpreadSheet
 {
     public class SAGoogleSpreadsheetLoader : EditorWindow
     {
-        private const string ApiKey = "1C8MbzCKT2CDGEU8Ix_KPRCfo6UgM-ZPx_wPwXGrX5po";
-
         public enum GenerateState
         {
             Script,
             Asset
         }
 
+        private const string ApiKey = "1C8MbzCKT2CDGEU8Ix_KPRCfo6UgM-ZPx_wPwXGrX5po";
+
         private const string AppName = "Google-Sheets";
-        private string _spreadsheetId = string.Empty;
-        private List<ValueRange> _listSheetData;
-        private List<string> _sheets;
-        private Vector2 _worksheetScroll;
         private Vector2 _cellScroll;
         private Vector2 _cellTitleScroll;
-
-        private string _sheetTitle = string.Empty;
+        private List<ValueRange> _listSheetData;
+        private string _saveAssetPath = string.Empty;
+        private string _saveScriptPath = string.Empty;
 
         private string _selectedWorksheet = string.Empty;
-        private string _saveScriptPath = string.Empty;
-        private string _saveAssetPath = string.Empty;
+        private List<string> _sheets;
+
+        private string _sheetTitle = string.Empty;
+        private string _spreadsheetId = string.Empty;
+        private Vector2 _worksheetScroll;
 
 
         private void OnEnable()
@@ -43,11 +43,67 @@ namespace SuperAshley.GoogleSpreadSheet
             _saveAssetPath = SASettings.AssetFolder;
         }
 
+        private void LoadSpreadsheetData()
+        {
+            _listSheetData = new List<ValueRange>();
+            GetDataSheets();
+        }
+
+        private void GetDataSheets()
+        {
+            //Validate input
+            if (string.IsNullOrEmpty(_spreadsheetId))
+            {
+                Debug.LogError("spreadSheetKey can not be null!");
+                return;
+            }
+
+            Debug.Log("Start downloading from key: " + _spreadsheetId);
+
+
+            var service = new SheetsService(new BaseClientService.Initializer
+            {
+                ApiKey = ApiKey,
+                ApplicationName = AppName
+            });
+            Debug.Log("Executing a list request...");
+
+            var spreadSheetData = service.Spreadsheets.Get(_spreadsheetId).Execute();
+            _sheetTitle = spreadSheetData.Properties.Title;
+            var sheets = spreadSheetData.Sheets;
+            if (sheets == null || sheets.Count <= 0)
+            {
+                Console.WriteLine("Not found any data!");
+                return;
+            }
+
+            _sheets = new List<string>();
+            foreach (var item in sheets)
+            {
+                _sheets.Add(item.Properties.Title);
+                Debug.Log(item.Properties.GridProperties);
+            }
+
+            var request =
+                service.Spreadsheets.Values.BatchGet(_spreadsheetId);
+            request.Ranges = _sheets;
+            var response = request.Execute();
+            _listSheetData = new List<ValueRange>();
+            foreach (var valueRange in response.ValueRanges) _listSheetData.Add(valueRange);
+
+            Debug.Log("Done!");
+
+            AssetDatabase.Refresh();
+
+            Debug.Log("Download completed.");
+        }
+
         #region UI
 
         /// <summary>
-        /// Draw the UI for this tool.
-        /// </summary>s
+        ///     Draw the UI for this tool.
+        /// </summary>
+        /// s
         private void OnGUI()
         {
             EditorGUIUtility.labelWidth = 80f;
@@ -170,10 +226,8 @@ namespace SuperAshley.GoogleSpreadSheet
 
 
             for (var col = 0; col < sheetData.Values[1].Count; col++)
-            {
                 GUILayout.Label(sheetData.Values[1][col].ToString(), "TextArea", GUILayout.Width(100f),
                     GUILayout.Height(20f));
-            }
 
             EditorGUILayout.EndHorizontal();
             GUI.backgroundColor = Color.white;
@@ -186,10 +240,8 @@ namespace SuperAshley.GoogleSpreadSheet
                 if (row == 0)
                     GUI.backgroundColor = Color.green;
                 for (var col = 0; col < sheetData.Values[row].Count; col++)
-                {
                     GUILayout.Label(sheetData.Values[row][col].ToString(), "TextArea", GUILayout.Width(100f),
                         GUILayout.Height(20f));
-                }
 
                 GUI.backgroundColor = Color.white;
                 EditorGUILayout.EndHorizontal();
@@ -257,63 +309,5 @@ namespace SuperAshley.GoogleSpreadSheet
         }
 
         #endregion
-
-        private void LoadSpreadsheetData()
-        {
-            _listSheetData = new List<ValueRange>();
-            GetDataSheets();
-        }
-
-        private void GetDataSheets()
-        {
-            //Validate input
-            if (string.IsNullOrEmpty(_spreadsheetId))
-            {
-                Debug.LogError("spreadSheetKey can not be null!");
-                return;
-            }
-
-            Debug.Log("Start downloading from key: " + _spreadsheetId);
-
-
-            var service = new SheetsService(new BaseClientService.Initializer()
-            {
-                ApiKey = ApiKey,
-                ApplicationName = AppName,
-            });
-            Debug.Log("Executing a list request...");
-
-            var spreadSheetData = service.Spreadsheets.Get(_spreadsheetId).Execute();
-            _sheetTitle = spreadSheetData.Properties.Title;
-            var sheets = spreadSheetData.Sheets;
-            if (sheets == null || sheets.Count <= 0)
-            {
-                Console.WriteLine("Not found any data!");
-                return;
-            }
-
-            _sheets = new List<string>();
-            foreach (var item in sheets)
-            {
-                _sheets.Add(item.Properties.Title);
-                Debug.Log(item.Properties.GridProperties);
-            }
-
-            SpreadsheetsResource.ValuesResource.BatchGetRequest request =
-                service.Spreadsheets.Values.BatchGet(_spreadsheetId);
-            request.Ranges = _sheets;
-            BatchGetValuesResponse response = request.Execute();
-            _listSheetData = new List<ValueRange>();
-            foreach (var valueRange in response.ValueRanges)
-            {
-                _listSheetData.Add(valueRange);
-            }
-
-            Debug.Log("Done!");
-
-            AssetDatabase.Refresh();
-
-            Debug.Log("Download completed.");
-        }
     }
 }

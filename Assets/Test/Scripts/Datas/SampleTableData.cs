@@ -1,13 +1,15 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-[System.Serializable]
-public class SampleTable {
-	public string Nameee;
-	public string SampleField;
+[Serializable]
+public class SampleTable
+{
+    public string Nameee;
+    public string SampleField;
 }
 
-public class SampleTableData : ScriptableObject {
-	public List<SampleTable> sampleTables = new List<SampleTable>();
+public class SampleTableData : ScriptableObject
+{
+    public List<SampleTable> sampleTables = new();
 }
-

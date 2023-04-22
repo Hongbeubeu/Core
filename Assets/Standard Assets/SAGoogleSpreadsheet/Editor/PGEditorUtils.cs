@@ -7,15 +7,16 @@
 /// You may obtain a copy of the License at: http://licensing.path-o-logical.com
 /// </Licensing>
 
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
+using Object = UnityEngine.Object;
 
 /// <summary>
-///	Functions to help with custom editors
+///     Functions to help with custom editors
 /// </summary>
 public static class PGEditorUtils
 {
@@ -27,8 +28,8 @@ public static class PGEditorUtils
     #region Managment Utilities
 
     /// <summary>
-    /// Will get an asset file at the specified path (and create one if none exists)
-    /// The file will be named the same as the type passed with '.asset' appended
+    ///     Will get an asset file at the specified path (and create one if none exists)
+    ///     The file will be named the same as the type passed with '.asset' appended
     /// </summary>
     /// <param name="basePath">The folder to look in</param>
     /// <returns>A reference to the asset component</returns>
@@ -52,7 +53,7 @@ public static class PGEditorUtils
     #region Layout Utilities
 
     /// <summary>
-    /// These are being deprecated now that we can release for specific versions of Unity.
+    ///     These are being deprecated now that we can release for specific versions of Unity.
     /// </summary>
     public static void SetLabelWidth()
     {
@@ -71,17 +72,17 @@ public static class PGEditorUtils
     }
 
     /// <summary>
-    /// A toggle button for a Bool type SerializedProperty. Nothing is returned because the 
-    /// property is set by reference.
+    ///     A toggle button for a Bool type SerializedProperty. Nothing is returned because the
+    ///     property is set by reference.
     /// </summary>
     /// <param name='property'>
-    /// SerializedProperty.
+    ///     SerializedProperty.
     /// </param>
     /// <param name='content'>
-    /// GUIContent(label, tooltip)
+    ///     GUIContent(label, tooltip)
     /// </param>
     /// <param name='width'>
-    /// Width of the button
+    ///     Width of the button
     /// </param>
     public static void ToggleButton(SerializedProperty property, GUIContent content, int width)
     {
@@ -107,30 +108,29 @@ public static class PGEditorUtils
     }
 
     /// <summary>
-    /// A generic version of EditorGUILayout.ObjectField.
-    /// Allows objects to be drag and dropped or picked.
-    /// This version defaults to 'allowSceneObjects = true'.
-    /// 
-    /// Instead of this:
+    ///     A generic version of EditorGUILayout.ObjectField.
+    ///     Allows objects to be drag and dropped or picked.
+    ///     This version defaults to 'allowSceneObjects = true'.
+    ///     Instead of this:
     ///     var script = (MyScript)target;
-    ///     script.transform = (Transform)EditorGUILayout.ObjectField("My Transform", script.transform, typeof(Transform), true);        
-    /// 
-    /// Do this:    
+    ///     script.transform = (Transform)EditorGUILayout.ObjectField("My Transform", script.transform, typeof(Transform),
+    ///     true);
+    ///     Do this:
     ///     var script = (MyScript)target;
-    ///     script.transform = EditorGUILayout.ObjectField<Transform>("My Transform", script.transform);        
+    ///     script.transform = EditorGUILayout.ObjectField<Transform>("My Transform", script.transform);
     /// </summary>
     /// <typeparam name="T">The type of object to use</typeparam>
     /// <param name="label">The label (text) to show to the left of the field</param>
     /// <param name="obj">The obj variable of the script this GUI field is for</param>
     /// <returns>A reference to what is in the field. An object or null.</returns>
-    public static T ObjectField<T>(string label, T obj) where T : UnityEngine.Object
+    public static T ObjectField<T>(string label, T obj) where T : Object
     {
-        return ObjectField<T>(label, obj, true);
+        return ObjectField(label, obj, true);
     }
 
     /// <summary>
-    /// A generic version of EditorGUILayout.ObjectField.
-    /// Allows objects to be drag and dropped or picked.
+    ///     A generic version of EditorGUILayout.ObjectField.
+    ///     Allows objects to be drag and dropped or picked.
     /// </summary>
     /// <typeparam name="T">The type of object to use</typeparam>
     /// <param name="label">The label (text) to show to the left of the field</param>
@@ -138,14 +138,14 @@ public static class PGEditorUtils
     /// <param name="allowSceneObjects">Allow scene objects. See Unity Docs for more.</param>
     /// <returns>A reference to what is in the field. An object or null.</returns>
     public static T ObjectField<T>(string label, T obj, bool allowSceneObjects)
-        where T : UnityEngine.Object
+        where T : Object
     {
         return (T)EditorGUILayout.ObjectField(label, obj, typeof(T), allowSceneObjects);
     }
 
     /// <summary>
-    /// A generic version of EditorGUILayout.ObjectField.
-    /// Allows objects to be drag and dropped or picked.
+    ///     A generic version of EditorGUILayout.ObjectField.
+    ///     Allows objects to be drag and dropped or picked.
     /// </summary>
     /// <typeparam name="T">The type of object to use</typeparam>
     /// <param name="label">The label (text) to show to the left of the field</param>
@@ -154,22 +154,20 @@ public static class PGEditorUtils
     /// <param name="options">Layout options. See Unity docs for more.</param>
     /// <returns>A reference to what is in the field. An object or null.</returns>
     public static T ObjectField<T>(string label, T obj, bool allowSceneObjects, GUILayoutOption[] options)
-        where T : UnityEngine.Object
+        where T : Object
     {
         return (T)EditorGUILayout.ObjectField(label, obj, typeof(T), allowSceneObjects, options);
     }
 
     /// <summary>
-    /// A generic version of EditorGUILayout.EnumPopup.
-    /// Displays an enum as a pop-up list of options
-    /// 
-    /// Instead of this:
+    ///     A generic version of EditorGUILayout.EnumPopup.
+    ///     Displays an enum as a pop-up list of options
+    ///     Instead of this:
     ///     var script = (MyScript)target;
-    ///     script.options = (MyScript.MY_ENUM_OPTIONS)EditorGUILayout.EnumPopup("Options", (System.Enum)script.options);       
-    /// 
-    /// Do this:    
+    ///     script.options = (MyScript.MY_ENUM_OPTIONS)EditorGUILayout.EnumPopup("Options", (System.Enum)script.options);
+    ///     Do this:
     ///     var script = (MyScript)target;
-    ///     script.options = EditorGUILayout.EnumPopup<MyScript.MY_ENUM_OPTIONS>("Options", script.options);        
+    ///     script.options = EditorGUILayout.EnumPopup<MyScript.MY_ENUM_OPTIONS>("Options", script.options);
     /// </summary>
     /// <typeparam name="T">The enum type</typeparam>
     /// <param name="label">The label (text) to show to the left of the field</param>
@@ -187,8 +185,10 @@ public static class PGEditorUtils
 
 
     /// <summary>
-    /// See EnumPopup<T>(string label, T enumVal).
-    /// This enables label-less GUI fields.
+    ///     See EnumPopup
+    ///     <T>
+    ///         (string label, T enumVal).
+    ///         This enables label-less GUI fields.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="enumVal"></param>
@@ -204,8 +204,8 @@ public static class PGEditorUtils
     }
 
     /// <summary>
-    /// Add a LayerMash field. This hasn't been made available by Unity even though
-    /// it exists in the automated version of the inspector (when no custom editor).
+    ///     Add a LayerMash field. This hasn't been made available by Unity even though
+    ///     it exists in the automated version of the inspector (when no custom editor).
     /// </summary>
     /// <param name="label">The string to display to the left of the control</param>
     /// <param name="selected">The LayerMask variable</param>
@@ -216,9 +216,9 @@ public static class PGEditorUtils
     }
 
     /// <summary>
-    /// Add a LayerMash field. This hasn't been made available by Unity even though
-    /// it exists in the automated version of the inspector (when no custom editor).
-    /// Contains code from: 
+    ///     Add a LayerMash field. This hasn't been made available by Unity even though
+    ///     it exists in the automated version of the inspector (when no custom editor).
+    ///     Contains code from:
     ///     http://answers.unity3d.com/questions/60959/mask-field-in-the-editor.html
     /// </summary>
     /// <param name="label">The string to display to the left of the control</param>
@@ -299,9 +299,13 @@ public static class PGEditorUtils
         if (GUI.changed && newSelected >= 0)
         {
             if (showSpecial && newSelected == 0)
+            {
                 selected = 0;
+            }
             else if (showSpecial && newSelected == 1)
+            {
                 selected = -1;
+            }
             else
             {
                 if (selected == (selected | (1 << layerNumbers[newSelected])))
@@ -324,7 +328,7 @@ public static class PGEditorUtils
     #region Foldout Fields and Utilities
 
     /// <summary>
-    /// Adds a fold-out list GUI from a generic list of any serialized object type
+    ///     Adds a fold-out list GUI from a generic list of any serialized object type
     /// </summary>
     /// <param name="list">A generic List</param>
     /// <param name="expanded">A bool to determine the state of the primary fold-out</param>
@@ -340,7 +344,7 @@ public static class PGEditorUtils
             alignment = TextAnchor.MiddleLeft
         };
 
-        expanded = AddFoldOutListHeader<string>(label, list, expanded, indent);
+        expanded = AddFoldOutListHeader(label, list, expanded, indent);
 
         // START. Will consist of one row with two columns. 
         //        The second column has the content
@@ -369,10 +373,10 @@ public static class PGEditorUtils
             item ??= "";
             list[i] = EditorGUILayout.TextField(item);
 
-            LIST_BUTTONS listButtonPressed = AddFoldOutListItemButtons();
+            var listButtonPressed = AddFoldOutListItemButtons();
             EditorGUILayout.EndHorizontal();
             GUILayout.Space(2);
-            UpdateFoldOutListOnButtonPressed<string>(list, i, listButtonPressed);
+            UpdateFoldOutListOnButtonPressed(list, i, listButtonPressed);
         }
 
         EditorGUILayout.EndVertical();
@@ -385,11 +389,11 @@ public static class PGEditorUtils
     }
 
     /// <summary>
-    /// Adds a fold-out list GUI from a generic list of any serialized object type
+    ///     Adds a fold-out list GUI from a generic list of any serialized object type
     /// </summary>
     /// <param name="list">A generic List</param>
     /// <param name="expanded">A bool to determine the state of the primary fold-out</param>
-    public static bool FoldOutObjList<T>(string label, List<T> list, bool expanded) where T : UnityEngine.Object
+    public static bool FoldOutObjList<T>(string label, List<T> list, bool expanded) where T : Object
     {
         // Store the previous indent and return the flow to it at the end
         var indent = EditorGUI.indentLevel;
@@ -401,7 +405,7 @@ public static class PGEditorUtils
             alignment = TextAnchor.MiddleLeft
         };
 
-        if (!AddFoldOutListHeader<T>(label, list, expanded, indent))
+        if (!AddFoldOutListHeader(label, list, expanded, indent))
             return false;
 
 
@@ -426,7 +430,7 @@ public static class PGEditorUtils
             list.RemoveAt(i);
             list.Insert(i, fieldVal);
 
-            LIST_BUTTONS listButtonPressed = AddFoldOutListItemButtons();
+            var listButtonPressed = AddFoldOutListItemButtons();
 
             EditorGUILayout.EndHorizontal();
 
@@ -444,7 +448,7 @@ public static class PGEditorUtils
                 case LIST_BUTTONS.Up:
                     if (i > 0)
                     {
-                        T shiftItem = list[i];
+                        var shiftItem = list[i];
                         list.RemoveAt(i);
                         list.Insert(i - 1, shiftItem);
                     }
@@ -455,7 +459,7 @@ public static class PGEditorUtils
                     // Don't allow 'down' presses for the last list item
                     if (i + 1 < list.Count)
                     {
-                        T shiftItem = list[i];
+                        var shiftItem = list[i];
                         list.RemoveAt(i);
                         list.Insert(i + 1, shiftItem);
                     }
@@ -480,10 +484,10 @@ public static class PGEditorUtils
     }
 
     /// <summary>
-    /// Adds a fold-out list GUI from a generic list of any serialized object type.
-    /// Uses System.Reflection to add all fields for a passed serialized object
-    /// instance. Handles most basic types including automatic naming like the 
-    /// inspector does by default
+    ///     Adds a fold-out list GUI from a generic list of any serialized object type.
+    ///     Uses System.Reflection to add all fields for a passed serialized object
+    ///     instance. Handles most basic types including automatic naming like the
+    ///     inspector does by default
     /// </summary>
     /// <param name="label"> The field label</param>
     /// <param name="list">A generic List</param>
@@ -496,23 +500,22 @@ public static class PGEditorUtils
         ref Dictionary<object, bool> foldOutStates)
         where T : new()
     {
-        return SerializedObjFoldOutList<T>(label, list, expanded, ref foldOutStates, false);
+        return SerializedObjFoldOutList(label, list, expanded, ref foldOutStates, false);
     }
 
     /// <summary>
-    /// Adds a fold-out list GUI from a generic list of any serialized object type.
-    /// Uses System.Reflection to add all fields for a passed serialized object
-    /// instance. Handles most basic types including automatic naming like the 
-    /// inspector does by default
-    /// 
-    /// Adds collapseBools (see docs below)
+    ///     Adds a fold-out list GUI from a generic list of any serialized object type.
+    ///     Uses System.Reflection to add all fields for a passed serialized object
+    ///     instance. Handles most basic types including automatic naming like the
+    ///     inspector does by default
+    ///     Adds collapseBools (see docs below)
     /// </summary>
     /// <param name="label"> The field label</param>
     /// <param name="list">A generic List</param>
     /// <param name="expanded">A bool to determine the state of the primary fold-out</param>
     /// <param name="foldOutStates">Dictionary<object, bool> used to track list item states</param>
     /// <param name="collapseBool">
-    /// If true, bools on list items will collapse fields which follow them
+    ///     If true, bools on list items will collapse fields which follow them
     /// </param>
     /// <returns>The new foldout state from user input. Just like Unity's foldout</returns>
     public static bool SerializedObjFoldOutList<T>(string label,
@@ -595,7 +598,7 @@ public static class PGEditorUtils
             #region Section Header
 
             // If there is a field with the name 'name' use it for our label
-            var itemLabel = PGEditorUtils.GetSerializedObjFieldName<T>(item);
+            var itemLabel = GetSerializedObjFieldName(item);
             if (itemLabel == "") itemLabel = string.Format("Element {0}", i);
 
 
@@ -623,7 +626,7 @@ public static class PGEditorUtils
             foldOutState = Foldout(foldOutState, itemLabel);
             foldOutStates[item] = foldOutState; // Used again below
 
-            LIST_BUTTONS listButtonPressed = AddFoldOutListItemButtons();
+            var listButtonPressed = AddFoldOutListItemButtons();
 
             EditorGUILayout.EndHorizontal();
 
@@ -633,12 +636,12 @@ public static class PGEditorUtils
 
 
             // If folded out, display all serialized fields
-            if (foldOutState == true)
+            if (foldOutState)
             {
                 EditorGUI.indentLevel = indent + 3;
 
                 // Display Fields for the list instance
-                PGEditorUtils.SerializedObjectFields<T>(item, collapseBool);
+                SerializedObjectFields(item, collapseBool);
                 GUILayout.Space(2);
             }
 
@@ -654,7 +657,7 @@ public static class PGEditorUtils
                 case LIST_BUTTONS.Up:
                     if (i > 0)
                     {
-                        T shiftItem = list[i];
+                        var shiftItem = list[i];
                         list.RemoveAt(i);
                         list.Insert(i - 1, shiftItem);
                     }
@@ -665,7 +668,7 @@ public static class PGEditorUtils
                     // Don't allow 'down' presses for the last list item
                     if (i + 1 < list.Count)
                     {
-                        T shiftItem = list[i];
+                        var shiftItem = list[i];
                         list.RemoveAt(i);
                         list.Insert(i + 1, shiftItem);
                     }
@@ -695,72 +698,69 @@ public static class PGEditorUtils
 
 
     /// <summary>
-    /// Searches a serialized object for a field matching "name" (not case-sensitve),
-    /// and if found, returns the value
+    ///     Searches a serialized object for a field matching "name" (not case-sensitve),
+    ///     and if found, returns the value
     /// </summary>
     /// <param name="instance">
-    /// An instance of the given type. Must be System.Serializable.
+    ///     An instance of the given type. Must be System.Serializable.
     /// </param>
     /// <returns>The name field's value or ""</returns>
     public static string GetSerializedObjFieldName<T>(T instance)
     {
         // get all public properties of T to see if there is one called 'name'
-        System.Reflection.FieldInfo[] fields = typeof(T).GetFields();
+        var fields = typeof(T).GetFields();
 
         // If there is a field with the name 'name' return its value
-        foreach (System.Reflection.FieldInfo fieldInfo in fields)
+        foreach (var fieldInfo in fields)
             if (fieldInfo.Name.ToLower() == "name")
                 return ((string)fieldInfo.GetValue(instance)).DeCamel();
 
         // If a field type is a UnityEngine object, return its name
         //   This is done in a second loop because the first is fast as is
-        foreach (System.Reflection.FieldInfo fieldInfo in fields)
-        {
+        foreach (var fieldInfo in fields)
             try
             {
-                var val = (UnityEngine.Object)fieldInfo.GetValue(instance);
+                var val = (Object)fieldInfo.GetValue(instance);
                 return val.name.DeCamel();
             }
             catch
             {
             }
-        }
 
         return "";
     }
 
     /// <summary>
-    /// Uses System.Reflection to add all fields for a passed serialized object
-    /// instance. Handles most basic types including automatic naming like the 
-    /// inspector does by default
-    /// 
-    /// Optionally, this will make a bool switch collapse the following members if they 
-    /// share the first 4 characters in their name or are not a bool (will collapse from
-    /// bool until it finds another bool that doesn't share the first 4 characters)
+    ///     Uses System.Reflection to add all fields for a passed serialized object
+    ///     instance. Handles most basic types including automatic naming like the
+    ///     inspector does by default
+    ///     Optionally, this will make a bool switch collapse the following members if they
+    ///     share the first 4 characters in their name or are not a bool (will collapse from
+    ///     bool until it finds another bool that doesn't share the first 4 characters)
     /// </summary>
     /// <param name="instance">
-    /// An instance of the given type. Must be System.Serializable.
+    ///     An instance of the given type. Must be System.Serializable.
     /// </param>
     public static void SerializedObjectFields<T>(T instance)
     {
-        SerializedObjectFields<T>(instance, false);
+        SerializedObjectFields(instance, false);
     }
 
     public static void SerializedObjectFields<T>(T instance, bool collapseBools)
     {
         // get all public properties of T to see if there is one called 'name'
-        System.Reflection.FieldInfo[] fields = typeof(T).GetFields();
+        var fields = typeof(T).GetFields();
 
-        bool boolCollapseState = false; // False until bool is found
-        string boolCollapseName = ""; // The name of the last bool member
-        string currentMemberName = ""; // The name of the member being processed
+        var boolCollapseState = false; // False until bool is found
+        var boolCollapseName = ""; // The name of the last bool member
+        var currentMemberName = ""; // The name of the member being processed
 
         // Display Fields Dynamically
-        foreach (System.Reflection.FieldInfo fieldInfo in fields)
+        foreach (var fieldInfo in fields)
         {
             if (!collapseBools)
             {
-                FieldInfoField<T>(instance, fieldInfo);
+                FieldInfoField(instance, fieldInfo);
                 continue;
             }
 
@@ -776,11 +776,11 @@ public static class PGEditorUtils
                 if (boolCollapseName.Length > 4 &&
                     currentMemberName.StartsWith(boolCollapseName.Substring(0, 4)))
                 {
-                    if (!boolCollapseState) FieldInfoField<T>(instance, fieldInfo);
+                    if (!boolCollapseState) FieldInfoField(instance, fieldInfo);
                     continue;
                 }
 
-                FieldInfoField<T>(instance, fieldInfo);
+                FieldInfoField(instance, fieldInfo);
 
 
                 boolCollapseName = currentMemberName;
@@ -789,21 +789,21 @@ public static class PGEditorUtils
             else
             {
                 // Add the field unless collapse is true
-                if (!boolCollapseState) FieldInfoField<T>(instance, fieldInfo);
+                if (!boolCollapseState) FieldInfoField(instance, fieldInfo);
             }
         }
     }
 
     /// <summary>
-    /// Uses a System.Reflection.FieldInfo to add a field
-    /// Handles most built-in types and components
-    /// includes automatic naming like the inspector does 
-    /// by default
+    ///     Uses a System.Reflection.FieldInfo to add a field
+    ///     Handles most built-in types and components
+    ///     includes automatic naming like the inspector does
+    ///     by default
     /// </summary>
     /// <param name="fieldInfo"></param>
-    public static void FieldInfoField<T>(T instance, System.Reflection.FieldInfo fieldInfo)
+    public static void FieldInfoField<T>(T instance, FieldInfo fieldInfo)
     {
-        string label = fieldInfo.Name.DeCamel();
+        var label = fieldInfo.Name.DeCamel();
 
         #region Built-in Data Types
 
@@ -814,21 +814,24 @@ public static class PGEditorUtils
             fieldInfo.SetValue(instance, val);
             return;
         }
-        else if (fieldInfo.FieldType == typeof(int))
+
+        if (fieldInfo.FieldType == typeof(int))
         {
             var val = (int)fieldInfo.GetValue(instance);
             val = EditorGUILayout.IntField(label, val);
             fieldInfo.SetValue(instance, val);
             return;
         }
-        else if (fieldInfo.FieldType == typeof(float))
+
+        if (fieldInfo.FieldType == typeof(float))
         {
             var val = (float)fieldInfo.GetValue(instance);
             val = EditorGUILayout.FloatField(label, val);
             fieldInfo.SetValue(instance, val);
             return;
         }
-        else if (fieldInfo.FieldType == typeof(bool))
+
+        if (fieldInfo.FieldType == typeof(bool))
         {
             var val = (bool)fieldInfo.GetValue(instance);
             val = EditorGUILayout.Toggle(label, val);
@@ -840,38 +843,42 @@ public static class PGEditorUtils
 
         #region Basic Unity Types
 
-        else if (fieldInfo.FieldType == typeof(GameObject))
+        if (fieldInfo.FieldType == typeof(GameObject))
         {
             var val = (GameObject)fieldInfo.GetValue(instance);
-            val = ObjectField<GameObject>(label, val);
+            val = ObjectField(label, val);
             fieldInfo.SetValue(instance, val);
             return;
         }
-        else if (fieldInfo.FieldType == typeof(Transform))
+
+        if (fieldInfo.FieldType == typeof(Transform))
         {
             var val = (Transform)fieldInfo.GetValue(instance);
-            val = ObjectField<Transform>(label, val);
+            val = ObjectField(label, val);
             fieldInfo.SetValue(instance, val);
             return;
         }
-        else if (fieldInfo.FieldType == typeof(Rigidbody))
+
+        if (fieldInfo.FieldType == typeof(Rigidbody))
         {
             var val = (Rigidbody)fieldInfo.GetValue(instance);
-            val = ObjectField<Rigidbody>(label, val);
+            val = ObjectField(label, val);
             fieldInfo.SetValue(instance, val);
             return;
         }
-        else if (fieldInfo.FieldType == typeof(Renderer))
+
+        if (fieldInfo.FieldType == typeof(Renderer))
         {
             var val = (Renderer)fieldInfo.GetValue(instance);
-            val = ObjectField<Renderer>(label, val);
+            val = ObjectField(label, val);
             fieldInfo.SetValue(instance, val);
             return;
         }
-        else if (fieldInfo.FieldType == typeof(Mesh))
+
+        if (fieldInfo.FieldType == typeof(Mesh))
         {
             var val = (Mesh)fieldInfo.GetValue(instance);
-            val = ObjectField<Mesh>(label, val);
+            val = ObjectField(label, val);
             fieldInfo.SetValue(instance, val);
             return;
         }
@@ -880,38 +887,42 @@ public static class PGEditorUtils
 
         #region Unity Collider Types
 
-        else if (fieldInfo.FieldType == typeof(BoxCollider))
+        if (fieldInfo.FieldType == typeof(BoxCollider))
         {
             var val = (BoxCollider)fieldInfo.GetValue(instance);
-            val = ObjectField<BoxCollider>(label, val);
+            val = ObjectField(label, val);
             fieldInfo.SetValue(instance, val);
             return;
         }
-        else if (fieldInfo.FieldType == typeof(SphereCollider))
+
+        if (fieldInfo.FieldType == typeof(SphereCollider))
         {
             var val = (SphereCollider)fieldInfo.GetValue(instance);
-            val = ObjectField<SphereCollider>(label, val);
+            val = ObjectField(label, val);
             fieldInfo.SetValue(instance, val);
             return;
         }
-        else if (fieldInfo.FieldType == typeof(CapsuleCollider))
+
+        if (fieldInfo.FieldType == typeof(CapsuleCollider))
         {
             var val = (CapsuleCollider)fieldInfo.GetValue(instance);
-            val = ObjectField<CapsuleCollider>(label, val);
+            val = ObjectField(label, val);
             fieldInfo.SetValue(instance, val);
             return;
         }
-        else if (fieldInfo.FieldType == typeof(MeshCollider))
+
+        if (fieldInfo.FieldType == typeof(MeshCollider))
         {
             var val = (MeshCollider)fieldInfo.GetValue(instance);
-            val = ObjectField<MeshCollider>(label, val);
+            val = ObjectField(label, val);
             fieldInfo.SetValue(instance, val);
             return;
         }
-        else if (fieldInfo.FieldType == typeof(WheelCollider))
+
+        if (fieldInfo.FieldType == typeof(WheelCollider))
         {
             var val = (WheelCollider)fieldInfo.GetValue(instance);
-            val = ObjectField<WheelCollider>(label, val);
+            val = ObjectField(label, val);
             fieldInfo.SetValue(instance, val);
             return;
         }
@@ -920,12 +931,11 @@ public static class PGEditorUtils
 
         #region Other Unity Types
 
-        else if (fieldInfo.FieldType == typeof(CharacterController))
+        if (fieldInfo.FieldType == typeof(CharacterController))
         {
             var val = (CharacterController)fieldInfo.GetValue(instance);
-            val = ObjectField<CharacterController>(label, val);
+            val = ObjectField(label, val);
             fieldInfo.SetValue(instance, val);
-            return;
         }
 
         #endregion Other Unity Types
@@ -933,7 +943,7 @@ public static class PGEditorUtils
 
 
     /// <summary>
-    /// Adds the GUI header line which contains the label and add buttons.
+    ///     Adds the GUI header line which contains the label and add buttons.
     /// </summary>
     /// <param name="label">The visible label in the GUI</param>
     /// <param name="list">Needed to add a new item if count is 0</param>
@@ -941,10 +951,10 @@ public static class PGEditorUtils
     /// <param name="lastIndent"></param>
     private static bool AddFoldOutListHeader<T>(string label, List<T> list, bool expanded, int lastIndent)
     {
-        int buttonSpacer = 6;
+        var buttonSpacer = 6;
 
         EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
-        expanded = PGEditorUtils.Foldout(expanded, label);
+        expanded = Foldout(expanded, label);
         if (!expanded)
         {
             // Don't add the '+' button when the contents are collapsed. Just quit.
@@ -958,7 +968,7 @@ public static class PGEditorUtils
 
         // Master add at end button. List items will insert
         if (GUILayout.Button(new GUIContent("+", "Click to add"), EditorStyles.toolbarButton))
-            list.Add(default(T));
+            list.Add(default);
 
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.EndHorizontal();
@@ -967,10 +977,10 @@ public static class PGEditorUtils
     }
 
     /// <summary>
-    /// Used by AddFoldOutListItemButtons to return which button was pressed, and by 
-    /// UpdateFoldOutListOnButtonPressed to process the pressed button for regular lists
+    ///     Used by AddFoldOutListItemButtons to return which button was pressed, and by
+    ///     UpdateFoldOutListOnButtonPressed to process the pressed button for regular lists
     /// </summary>
-    enum LIST_BUTTONS
+    private enum LIST_BUTTONS
     {
         None,
         Up,
@@ -980,35 +990,35 @@ public static class PGEditorUtils
     }
 
     /// <summary>
-    /// Adds the buttons which control a list item
+    ///     Adds the buttons which control a list item
     /// </summary>
     /// <returns>LIST_BUTTONS - The LIST_BUTTONS pressed or LIST_BUTTONS.None</returns>
     private static LIST_BUTTONS AddFoldOutListItemButtons()
     {
         #region Layout
 
-        int buttonSpacer = 6;
+        var buttonSpacer = 6;
 
         EditorGUILayout.BeginHorizontal(GUILayout.MaxWidth(100));
         // The up arrow will move things towards the beginning of the List
         var upArrow = '\u25B2'.ToString();
-        bool upPressed = GUILayout.Button(new GUIContent(upArrow, "Click to shift up"),
+        var upPressed = GUILayout.Button(new GUIContent(upArrow, "Click to shift up"),
             EditorStyles.toolbarButton);
 
         // The down arrow will move things towards the end of the List
         var dnArrow = '\u25BC'.ToString();
-        bool downPressed = GUILayout.Button(new GUIContent(dnArrow, "Click to shift down"),
+        var downPressed = GUILayout.Button(new GUIContent(dnArrow, "Click to shift down"),
             EditorStyles.toolbarButton);
 
         // A little space between button groups
         GUILayout.Space(buttonSpacer);
 
         // Remove Button - Process presses later
-        bool removePressed = GUILayout.Button(new GUIContent("-", "Click to remove"),
+        var removePressed = GUILayout.Button(new GUIContent("-", "Click to remove"),
             EditorStyles.toolbarButton);
 
         // Add button - Process presses later
-        bool addPressed = GUILayout.Button(new GUIContent("+", "Click to insert new"),
+        var addPressed = GUILayout.Button(new GUIContent("+", "Click to insert new"),
             EditorStyles.toolbarButton);
 
         EditorGUILayout.EndHorizontal();
@@ -1016,17 +1026,17 @@ public static class PGEditorUtils
         #endregion Layout
 
         // Return the pressed button if any
-        if (upPressed == true) return LIST_BUTTONS.Up;
-        if (downPressed == true) return LIST_BUTTONS.Down;
-        if (removePressed == true) return LIST_BUTTONS.Remove;
-        if (addPressed == true) return LIST_BUTTONS.Add;
+        if (upPressed) return LIST_BUTTONS.Up;
+        if (downPressed) return LIST_BUTTONS.Down;
+        if (removePressed) return LIST_BUTTONS.Remove;
+        if (addPressed) return LIST_BUTTONS.Add;
 
         return LIST_BUTTONS.None;
     }
 
     /// <summary>
-    /// Used by basic foldout lists to process any list item button presses which will alter
-    /// the order or members of the ist
+    ///     Used by basic foldout lists to process any list item button presses which will alter
+    ///     the order or members of the ist
     /// </summary>
     /// <param name="listButtonPressed"></param>
     private static void UpdateFoldOutListOnButtonPressed<T>(List<T> list, int currentIndex,
@@ -1041,7 +1051,7 @@ public static class PGEditorUtils
             case LIST_BUTTONS.Up:
                 if (currentIndex > 0)
                 {
-                    T shiftItem = list[currentIndex];
+                    var shiftItem = list[currentIndex];
                     list.RemoveAt(currentIndex);
                     list.Insert(currentIndex - 1, shiftItem);
                 }
@@ -1052,7 +1062,7 @@ public static class PGEditorUtils
                 // Don't allow 'down' presses for the last list item
                 if (currentIndex + 1 < list.Count)
                 {
-                    T shiftItem = list[currentIndex];
+                    var shiftItem = list[currentIndex];
                     list.RemoveAt(currentIndex);
                     list.Insert(currentIndex + 1, shiftItem);
                 }
@@ -1064,15 +1074,15 @@ public static class PGEditorUtils
                 break;
 
             case LIST_BUTTONS.Add:
-                list.Insert(currentIndex, default(T));
+                list.Insert(currentIndex, default);
                 break;
         }
     }
 
 
     /// <summary>
-    /// Adds a foldout in 'LookLikeInspector' which has a full bar to click on, not just
-    /// the little triangle. It also adds a default tool-tip.
+    ///     Adds a foldout in 'LookLikeInspector' which has a full bar to click on, not just
+    ///     the little triangle. It also adds a default tool-tip.
     /// </summary>
     /// <param name="expanded"></param>
     /// <param name="label"></param>
@@ -1096,18 +1106,18 @@ public static class PGEditorUtils
 public static class PGEditorToolsStringExtensions
 {
     /// <summary>
-    /// Converts a string from camel-case to seperate words that start with 
-    /// capital letters. Also removes leading underscores.
+    ///     Converts a string from camel-case to seperate words that start with
+    ///     capital letters. Also removes leading underscores.
     /// </summary>
     /// <returns>string</returns>
     public static string DeCamel(this string s)
     {
         if (string.IsNullOrEmpty(s)) return string.Empty;
 
-        System.Text.StringBuilder newStr = new System.Text.StringBuilder();
+        var newStr = new StringBuilder();
 
         char c;
-        for (int i = 0; i < s.Length; i++)
+        for (var i = 0; i < s.Length; i++)
         {
             c = s[i];
 
@@ -1158,14 +1168,14 @@ public static class PGEditorToolsStringExtensions
 
 
     /// <summary>
-    /// Capitalizes only the first letter of a string
+    ///     Capitalizes only the first letter of a string
     /// </summary>
     /// <returns>string</returns>
     public static string Capitalize(this string s)
     {
         if (string.IsNullOrEmpty(s)) return string.Empty;
 
-        char[] a = s.ToCharArray();
+        var a = s.ToCharArray();
         a[0] = char.ToUpper(a[0]);
         return new string(a);
     }

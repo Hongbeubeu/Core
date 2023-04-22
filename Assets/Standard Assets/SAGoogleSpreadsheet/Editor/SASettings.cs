@@ -3,9 +3,7 @@
 // Copyright © 2014 SuperAshley Entertainment
 //----------------------------------------------
 
-using UnityEngine;
 using UnityEditor;
-using System.Collections;
 
 namespace SuperAshley.GoogleSpreadSheet
 {
@@ -13,7 +11,7 @@ namespace SuperAshley.GoogleSpreadSheet
     {
         public static string SpreadsheetID
         {
-            get { return SpreadSheetLoaderConfig.Instance.SpreadsheetID; }
+            get => SpreadSheetLoaderConfig.Instance.SpreadsheetID;
             set
             {
                 SpreadSheetLoaderConfig.Instance.SpreadsheetID = value;

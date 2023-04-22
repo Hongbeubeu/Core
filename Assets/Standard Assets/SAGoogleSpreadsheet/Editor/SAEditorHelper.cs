@@ -10,7 +10,6 @@ namespace SuperAshley.GoogleSpreadSheet
 {
     public class SAEditorHelper
     {
-
         public static void DrawHeader(string text)
         {
             GUILayout.BeginHorizontal();

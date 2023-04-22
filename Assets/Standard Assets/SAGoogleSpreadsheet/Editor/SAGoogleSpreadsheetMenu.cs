@@ -9,7 +9,6 @@ namespace SuperAshley.GoogleSpreadSheet
 {
     public static class SAGoogleSpreadsheetMenu
     {
-
         [MenuItem("Tools/Open Spreadsheet Loader", false, 0)]
         public static void OpenSpreadsheetLoader()
         {
