@@ -17,9 +17,9 @@ namespace SuperAshley.GoogleSpreadSheet
     {
         const string FIELD_FORMAT = "\tpublic {0} {1};\n";
 
-        static public void GenerateClass(string name, ValueRange cellList)
+        public static void GenerateClass(string name, ValueRange cellList)
         {
-            string className = cellList.Values[0][0].ToString();
+            var className = cellList.Values[0][0].ToString();
             Type elementType = Assembly.GetExecutingAssembly().GetType(className);
             if (elementType == null)
             {

@@ -11,57 +11,50 @@ namespace SuperAshley.GoogleSpreadSheet
 {
     public class SASettings
     {
-        static public string SpreadsheetID
+        public static string SpreadsheetID
         {
-//            get { return EditorPrefs.GetString("SASpreadsheetID", "1TtZA6pNTPko10hFZ-OL3q-6GNfwqnvxjxD3cTx04wsY"); }
-//            set { EditorPrefs.SetString("SASpreadsheetID", value); }
             get { return SpreadSheetLoaderConfig.Instance.SpreadsheetID; }
             set
             {
-                SpreadSheetLoaderConfig.Instance.SpreadsheetID =  value;
+                SpreadSheetLoaderConfig.Instance.SpreadsheetID = value;
                 EditorUtility.SetDirty(SpreadSheetLoaderConfig.Instance);
             }
         }
 
-        static public string WorksheetJSON
+        public static string WorksheetJSON
         {
-            get { return EditorPrefs.GetString("SAWorksheetJSON", string.Empty); }
-            set { EditorPrefs.SetString("SAWorksheetJSON", value); }
+            get => EditorPrefs.GetString("SAWorksheetJSON", string.Empty);
+            set => EditorPrefs.SetString("SAWorksheetJSON", value);
         }
 
-        static public string CellsJSON
+        public static string CellsJSON
         {
-            get { return EditorPrefs.GetString("SACellsJSON", string.Empty); }
-            set { EditorPrefs.SetString("SACellsJSON", value); }
+            get => EditorPrefs.GetString("SACellsJSON", string.Empty);
+            set => EditorPrefs.SetString("SACellsJSON", value);
         }
 
-        static public string SelectedWorksheet
+        public static string SelectedWorksheet
         {
-            get { return EditorPrefs.GetString("SASelectedWorksheet", string.Empty); }
-            set { EditorPrefs.SetString("SASelectedWorksheet", value); }
+            get => EditorPrefs.GetString("SASelectedWorksheet", string.Empty);
+            set => EditorPrefs.SetString("SASelectedWorksheet", value);
         }
 
-        static public string ScriptFolder
+        public static string ScriptFolder
         {
-//            get { return EditorPrefs.GetString("SAScriptFolder", "Assets"); }
-//            set { EditorPrefs.SetString("SAScriptFolder", value); }
-            get { return SpreadSheetLoaderConfig.Instance.ScriptFolder; }
+            get => SpreadSheetLoaderConfig.Instance.ScriptFolder;
             set
             {
-                SpreadSheetLoaderConfig.Instance.ScriptFolder =  value; 
+                SpreadSheetLoaderConfig.Instance.ScriptFolder = value;
                 EditorUtility.SetDirty(SpreadSheetLoaderConfig.Instance);
-
             }
         }
 
-        static public string AssetFolder
+        public static string AssetFolder
         {
-//            get { return EditorPrefs.GetString("SAAssetFolder", "Assets"); }
-//            set { EditorPrefs.SetString("SAAssetFolder", value); }
-            get { return SpreadSheetLoaderConfig.Instance.AssetFolder; }
+            get => SpreadSheetLoaderConfig.Instance.AssetFolder;
             set
             {
-                SpreadSheetLoaderConfig.Instance.AssetFolder =  value; 
+                SpreadSheetLoaderConfig.Instance.AssetFolder = value;
                 EditorUtility.SetDirty(SpreadSheetLoaderConfig.Instance);
             }
         }

@@ -5,14 +5,13 @@
 
 using UnityEditor;
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace SuperAshley.GoogleSpreadSheet
 {
     public class SAEditorHelper
     {
 
-        static public void DrawHeader(string text)
+        public static void DrawHeader(string text)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Space(3f);
@@ -21,7 +20,7 @@ namespace SuperAshley.GoogleSpreadSheet
             GUILayout.EndHorizontal();
         }
 
-        static public void DrawSubHeader(string text)
+        public static void DrawSubHeader(string text)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Space(3f);
@@ -30,7 +29,7 @@ namespace SuperAshley.GoogleSpreadSheet
             GUILayout.EndHorizontal();
         }
 
-        static public void BeginContents()
+        public static void BeginContents()
         {
             GUILayout.BeginHorizontal();
             GUILayout.Space(4f);
@@ -39,7 +38,7 @@ namespace SuperAshley.GoogleSpreadSheet
             GUILayout.Space(2f);
         }
 
-        static public void EndContents()
+        public static void EndContents()
         {
             GUILayout.Space(3f);
             GUILayout.EndVertical();

@@ -7,11 +7,11 @@ using UnityEditor;
 
 namespace SuperAshley.GoogleSpreadSheet
 {
-    static public class SAGoogleSpreadsheetMenu
+    public static class SAGoogleSpreadsheetMenu
     {
 
         [MenuItem("Tools/Open Spreadsheet Loader", false, 0)]
-        static public void OpenSpreadsheetLoader()
+        public static void OpenSpreadsheetLoader()
         {
             EditorWindow.GetWindow<SAGoogleSpreadsheetLoader>(false, "Spreadsheet Loader", true).Show();
         }
