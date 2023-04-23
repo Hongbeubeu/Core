@@ -15,7 +15,7 @@ MonoBehaviour:
   sampleTables:
   - Nameee: Hong
     SampleField: 1
-  - Nameee: Beu
+  - Nameee: 0
     SampleField: 2
   - Nameee: Ken
     SampleField: 3
